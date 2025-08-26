@@ -2,6 +2,8 @@
 
 可以自定义Vue组件名的Vite插件
 
+<a href="README.md">English</a> | 中文
+
 ## 功能
 
 * 自动为SFC生成组件名 `name` ，供 `keep-alive` 组件或 `DevTools` 工具等使用
