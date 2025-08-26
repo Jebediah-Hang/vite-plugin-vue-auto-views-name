@@ -2,7 +2,7 @@
 
 可以自定义Vue组件名的Vite插件
 
-<a href="README.md">English</a> | 中文
+[English](README.md) | 中文
 
 ## 功能
 

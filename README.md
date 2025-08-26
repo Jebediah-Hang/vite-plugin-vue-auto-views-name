@@ -2,7 +2,7 @@
 
 A Vite plugin that allows customization of Vue component name.
 
-English | <a href="README-zh.md">中文</a>
+English | [中文](README-zh.md)
 
 ## Feature
 
