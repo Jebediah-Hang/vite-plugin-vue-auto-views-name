@@ -3,30 +3,30 @@ import { parse, compileScript } from "@vue/compiler-sfc";
 
 interface OptionsType {
   match?: string | RegExp;
-  folderPath?: string;
+  removePath?: string;
   rewrite?: (id: string) => string;
 }
 
 // 默认name处理方法，取 /src/views 下的路径
-function createName(filePath: string, folderPath: string): string {
-  const viewsIndex = filePath.indexOf(folderPath);
+function createName(filePath: string, removePath: string): string {
+  const viewsIndex = filePath.indexOf(removePath);
   if (viewsIndex === -1) {
     return "";
   }
 
-  const pathName = filePath.substring(viewsIndex - 1 + folderPath.length).replace(/\.vue$/, "");
+  const pathName = filePath.substring(viewsIndex - 1 + removePath.length).replace(/\.vue$/, "");
 
   return pathName;
 }
 
-export default function viewsAutoName(options?: OptionsType): Plugin {
+export default function autoViewsName(options?: OptionsType): Plugin {
   return {
-    name: "vite-plugin-views-auto-name",
+    name: "vite-plugin-vue-auto-views-name",
     enforce: "pre",
     transform(code: string, id: string) {
       const {
         match = /\/src\/views\/.*\.vue$/i,
-        folderPath = "/src/views/",
+        removePath = "/src/views/",
         rewrite
       } = options || {};
 
@@ -35,7 +35,7 @@ export default function viewsAutoName(options?: OptionsType): Plugin {
       }
 
       try {
-        const name = typeof rewrite === "function" ? rewrite(id) : createName(id, folderPath);
+        const name = typeof rewrite === "function" ? rewrite(id) : createName(id, removePath);
 
         if (!name) {
           return;
@@ -53,20 +53,16 @@ export default function viewsAutoName(options?: OptionsType): Plugin {
         const astResult = compileScript(descriptor, { id });
 
         if (!descriptor.script && descriptor.scriptSetup) {
-          // 只有 script setup
           const scriptSetupAst = astResult.scriptSetupAst;
 
-          // 是否有 defineOptions
           const defineOptionsStatement: any = scriptSetupAst
             ? scriptSetupAst.find((s: any) => s.expression?.callee?.name === "defineOptions")
             : null;
 
-          // defineOptions 是否已有参数
           const defineOptionsArgs: Array<any> | null = defineOptionsStatement
             ? defineOptionsStatement.expression?.arguments[0]?.properties
             : null;
 
-          // defineOptions 参数是否已有 name
           const defineOptionsNameProp: any = defineOptionsArgs
             ? defineOptionsArgs.find((arg) => arg.key.name === "name")
             : null;
@@ -75,7 +71,7 @@ export default function viewsAutoName(options?: OptionsType): Plugin {
             .map(([attr, value]) => `${attr}${typeof value === "string" ? `="${value}"` : ""}`)
             .join(" ");
 
-          let scriptContent = descriptor.scriptSetup.content;
+          const scriptContent = descriptor.scriptSetup.content;
           let newScriptContent = "";
 
           if (defineOptionsNameProp) {
@@ -104,7 +100,6 @@ export default function viewsAutoName(options?: OptionsType): Plugin {
             `<script ${scriptAttrs}>${newScriptContent}</script>`
           );
 
-          // 返回修改后的代码
           return { code: newCode };
         }
 
