@@ -1,0 +1,45 @@
+{
+  "name": "vite-plugin-vue-auto-views-name",
+  "description": "A Vite plugin that allows customization of Vue component name.",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build && tsc",
+    "build:types": "tsc --emitDeclarationOnly"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "typescript": "^5.9.2",
+    "vite": "^5.4.19"
+  },
+  "peerDependencies": {
+    "vite": ">=5.0.0",
+    "vue": ">=3.4.0"
+  },
+  "keywords": [
+    "vite",
+    "vite-plugin",
+    "vue",
+    "auto views name",
+    "auto component name"
+  ],
+  "license": "MIT",
+  "author": "jebediah-hang",
+  "homepage": "https://github.com/Jebediah-Hang/vite-plugin-vue-auto-views-name#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Jebediah-Hang/vite-plugin-vue-auto-views-name.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Jebediah-Hang/vite-plugin-vue-auto-views-name/issues"
+  }
+}
